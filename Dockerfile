@@ -4,6 +4,9 @@
 
 FROM openjdk:10 AS BUILDER
 
+ARG AWS_ACCESS_KEY
+ARG AWS_SECRET_KEY
+
 #make the project dir
 ENV APP_HOME=/proj
 RUN mkdir -p  $APP_HOME
@@ -35,9 +38,9 @@ LABEL vendor="Overseas Labs Limited" \
 
 EXPOSE 8080
 
-COPY --from=BUILDER /proj/build/distributions/code-boot.tar /app/
+COPY --from=BUILDER /proj/build/distributions/mailer-boot.tar /app/
 WORKDIR /app
-RUN tar -xvf code-boot.tar
-WORKDIR /app/code-boot/bin
+RUN tar -xvf mailer-boot.tar && rm mailer-boot.tar
+WORKDIR /app/mailer-boot/bin
 
-CMD ["/app/code-boot/bin/code"]
+CMD ["/app/mailer-boot/bin/code"]
