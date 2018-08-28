@@ -1,22 +1,23 @@
 package com.overseaslabs.examples.mailer.controller;
 
 import com.overseaslabs.examples.mailer.entity.Email;
+import com.overseaslabs.examples.mailer.repository.EmailRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Exposes the microservice's API
  */
 @RestController
 public class ApiController {
+
+    @Autowired
+    private EmailRepository emailRepository;
 
     /**
      * Find the email
@@ -25,18 +26,18 @@ public class ApiController {
      * @return Email instance
      */
     @GetMapping("/emails/{id}")
-    public Email get(@PathVariable int id) {
-        return new Email();
+    public Optional<Email> get(@PathVariable int id) {
+        return emailRepository.findById(id);
     }
 
     /**
      * Find the emails matching to the search request
      *
-     * @param request HTTP request
+     * @param pageable Pagination info
      * @return The found emails
      */
     @GetMapping("/emails")
-    public List<Email> find(HttpServletRequest request) {
-        return new ArrayList<>();
+    public Page<Email> find(Pageable pageable) {
+        return emailRepository.findAll(pageable);
     }
 }
