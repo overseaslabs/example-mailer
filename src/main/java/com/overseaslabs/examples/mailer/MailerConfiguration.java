@@ -39,9 +39,14 @@ public class MailerConfiguration {
         return template;
     }
 
-    @Bean
-    ChannelTopic topic() {
+    @Bean("ureg")
+    ChannelTopic uregTopic() {
         return new ChannelTopic("example:ureg");
+    }
+
+    @Bean("web")
+    ChannelTopic webTopic() {
+        return new ChannelTopic("example:web");
     }
 
     @Bean
@@ -54,7 +59,7 @@ public class MailerConfiguration {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(messageListener(), topic());
+        container.addMessageListener(messageListener(), uregTopic());
 
         return container;
     }

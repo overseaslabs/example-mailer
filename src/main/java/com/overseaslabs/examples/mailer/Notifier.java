@@ -5,7 +5,6 @@ import com.overseaslabs.examples.mailer.repository.EmailRepository;
 import com.overseaslabs.examples.ureg.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import com.sendgrid.*;
 
@@ -27,7 +26,7 @@ public class Notifier {
     private EmailRepository emailRepository;
 
     @Autowired
-    private SimpMessagingTemplate template;
+    private RedisMessagePublisher publisher;
 
     /**
      * Notify a user
@@ -46,7 +45,7 @@ public class Notifier {
         SendGrid sg = new SendGrid(apiKey);
         Request request = new Request();
 
-        ProviderResponse providerResponse = new ProviderResponse();
+        ProviderResponse providerResponse = null;
 
         try {
             request.setMethod(Method.POST);
@@ -62,16 +61,16 @@ public class Notifier {
 
             emailRepository.save(email);
 
-            providerResponse.setEmail(email)
-                    .setMessage("An email has been successfully sent (reported via a websocket)")
-                    .setSuccess(true);
+            providerResponse = new ProviderResponse(true, "An email has been successfully sent (reported via a websocket)");
+
 
         } catch (IOException ex) {
-            providerResponse.setMessage(String.format("Email sending failed. Reason: %s (reported via a websocket)", ex.getMessage())).setSuccess(true);
+            providerResponse = new ProviderResponse(false, ex.getMessage() + " (reported via a websocket)");
             ex.printStackTrace();
 
         } finally {
-            template.convertAndSend("/topic/emails", providerResponse);
+            //send the response to the web server
+            publisher.publish(providerResponse);
         }
     }
 }
