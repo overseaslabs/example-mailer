@@ -1,9 +1,11 @@
 package com.overseaslabs.examples.mailer;
 
+import com.sendgrid.SendGrid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -15,6 +17,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 @Configuration
 @PropertySource("application.properties")
+@EnableJpaAuditing
 public class MailerConfiguration {
 
     @Value("${spring.redis.host}")
@@ -22,6 +25,9 @@ public class MailerConfiguration {
 
     @Value("${spring.redis.port}")
     private Integer port;
+
+    @Value("${SENDGRID_API_KEY}")
+    private String sgApiKey;
 
     @Bean()
     JedisConnectionFactory jedisConnectionFactory() {
@@ -62,5 +68,10 @@ public class MailerConfiguration {
         container.addMessageListener(messageListener(), uregTopic());
 
         return container;
+    }
+
+    @Bean
+    public SendGrid sendGrid() {
+        return new SendGrid(sgApiKey);
     }
 }
