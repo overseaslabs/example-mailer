@@ -1,7 +1,7 @@
 package com.overseaslabs.examples.mailer;
 
 import com.sendgrid.*;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +11,13 @@ import java.io.IOException;
 @Scope("prototype")
 class SendgridEmailBuilder implements EmailBuilder<Response> {
 
-    @Value("${SENDGRID_API_KEY}")
-    private String apiKey;
-
     private Email from;
     private Email to;
     private String subject;
     private Content content;
+
+    @Autowired
+    private SendGrid sg;
 
     @Override
     public EmailBuilder from(String email, String name) {
@@ -45,7 +45,6 @@ class SendgridEmailBuilder implements EmailBuilder<Response> {
 
     @Override
     public Response send() throws IOException {
-        SendGrid sg = new SendGrid(apiKey);
         Request request = new Request();
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
