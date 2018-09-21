@@ -23,7 +23,7 @@ mainClassName = 'com.overseaslabs.examples.mailer.App'
 
 bootJar {
     baseName = 'mailer'
-    version = '0.1.0'
+    version = '1.0.0'
 }
 
 dependencies {

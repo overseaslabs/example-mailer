@@ -8,8 +8,7 @@ import org.springframework.data.redis.connection.MessageListener;
 
 import java.io.IOException;
 
-public class RedisMessageListener implements MessageListener {
-
+class RedisMessageListener implements MessageListener {
     @Autowired
     ObjectMapper om;
 
@@ -17,6 +16,7 @@ public class RedisMessageListener implements MessageListener {
     Notifier notifier;
 
     public void onMessage(Message message, byte[] pattern) {
+        //listen for a message indicating that a new user have been added and notify this user
         User user = null;
 
         try {

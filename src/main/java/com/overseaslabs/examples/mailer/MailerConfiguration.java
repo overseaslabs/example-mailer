@@ -14,18 +14,26 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
-
 @Configuration
 @PropertySource("application.properties")
 @EnableJpaAuditing
-public class MailerConfiguration {
+class MailerConfiguration {
 
+    /**
+     * Redis host
+     */
     @Value("${spring.redis.host}")
     private String host;
 
+    /**
+     * Redis port
+     */
     @Value("${spring.redis.port}")
     private Integer port;
 
+    /**
+     * Sendgrid API key
+     */
     @Value("${SENDGRID_API_KEY}")
     private String sgApiKey;
 
@@ -38,18 +46,24 @@ public class MailerConfiguration {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    RedisTemplate<String, Object> redisTemplate() {
         final RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisConnectionFactory());
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         return template;
     }
 
+    /**
+     * The topic for publishing user registry messages
+     */
     @Bean("ureg")
     ChannelTopic uregTopic() {
         return new ChannelTopic("example:ureg");
     }
 
+    /**
+     * The topic for publishing web messages
+     */
     @Bean("web")
     ChannelTopic webTopic() {
         return new ChannelTopic("example:web");
@@ -61,7 +75,7 @@ public class MailerConfiguration {
     }
 
     @Bean
-    public RedisMessageListenerContainer container() {
+    RedisMessageListenerContainer container() {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
         container.setConnectionFactory(jedisConnectionFactory());
@@ -70,8 +84,11 @@ public class MailerConfiguration {
         return container;
     }
 
+    /**
+     * Sendgrid API client
+     */
     @Bean
-    public SendGrid sendGrid() {
+    SendGrid sendGrid() {
         return new SendGrid(sgApiKey);
     }
 }

@@ -1,6 +1,6 @@
 package com.overseaslabs.examples.mailer;
 
-public interface MessagePublisher {
+interface MessagePublisher {
 
     /**
      * Publish a message

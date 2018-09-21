@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 /**
- * Exposes the microservice's API
+ * Exposes the API
  */
 @RestController
 public class ApiController {
@@ -22,10 +20,7 @@ public class ApiController {
     private EmailRepository emailRepository;
 
     /**
-     * Find the email
-     *
-     * @param id The ID of the user
-     * @return Email instance
+     * Fetch the email
      */
     @GetMapping("/emails/{id}")
     public Email get(@PathVariable int id) throws ResourceNotFoundException {
@@ -34,9 +29,6 @@ public class ApiController {
 
     /**
      * Find the emails matching to the search request
-     *
-     * @param pageable Pagination info
-     * @return The found emails
      */
     @GetMapping("/emails")
     public Page<Email> find(Pageable pageable) {
