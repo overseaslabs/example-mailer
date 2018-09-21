@@ -37,8 +37,8 @@ dependencies {
             [group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'],
             [group: 'com.sendgrid', name: 'sendgrid-java', version: '4.2.1'],
             [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.6'],
-            [group: 'com.overseaslabs.example', name: 'entities', version: '0.4.1'],
-            [group: 'com.overseaslabs.example', name: 'utils', version: '0.2.0'],
+            [group: 'com.overseaslabs.example', name: 'entities', version: '1.0.0'],
+            [group: 'com.overseaslabs.example', name: 'utils', version: '1.0.0'],
     )
 
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.4.RELEASE') {
