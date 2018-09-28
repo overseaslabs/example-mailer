@@ -34,7 +34,7 @@ LABEL vendor="Overseas Labs Limited" \
       vendor.website="http://overseaslsbs.com" \
       description="Mailer microservice" \
       project="Example project" \
-      tag="overseaslabs/example-mailer"
+      tag="overseaslabs/example-mailer:1.0.1"
 
 EXPOSE 8080
 
@@ -43,4 +43,4 @@ WORKDIR /app
 RUN tar -xvf mailer-boot.tar && rm mailer-boot.tar
 WORKDIR /app/mailer-boot/bin
 
-CMD ["/app/mailer-boot/bin/code"]
+CMD ["/app/mailer-boot/bin/mailer"]
